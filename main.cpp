@@ -4199,17 +4199,28 @@ int main()
 }
 */
 /*
-2020-02-12
+2020-02-11
 Lee Min Keon
-Baekjoon Online Judge #11438 dp w/ binary lifting (2^k memoization)
+Baekjoon Online Judge #1626 Union Find & Kruskal Implementation
 mkleeboy3@naver.com
 */
 /*
 #include <iostream>
+#include <algorithm>
+#include <climits>
 #include <vector>
 
-#define MAX_NODE 100001 // max number possible
-#define MAX_HEIGHT 21
+#define MAX_VERTICES 50001
+#define MAX_EDGES 200001
+#define MAX_HEIGHT 20
+
+typedef struct pairs
+{
+    int a;
+    int b;
+    int edge;
+    bool inMST;
+} pairs;
 
 typedef struct list_node // node for adjacency list & tree
 {
@@ -4218,14 +4229,16 @@ typedef struct list_node // node for adjacency list & tree
     int depth;
 } list_node;
 
-list_node tree[MAX_NODE]; // adjacency list for tree
-int N, M, DP[MAX_NODE][MAX_HEIGHT]; // DP list, DP[i][j] = (2^j)'th ancestor of node i
+int UF[MAX_VERTICES], UF_SIZE[MAX_VERTICES], DP[MAX_VERTICES][MAX_HEIGHT]; // disjoint set for MST cycle check
+list_node MST[MAX_VERTICES]; // adj list for MST
+
+// TODO: fix MST declaration, depth calculation, parent calculation, etc...
 
 int LCA(int u, int v)
 {
-    if(tree[u].depth > tree[v].depth) std::swap(u, v); // set u the higher element for the convenience of calculation
+    if(MST[u].depth > MST[v].depth) std::swap(u, v); // set u the higher element for the convenience of calculation
     
-    int dif = tree[v].depth - tree[u].depth;
+    int dif = MST[v].depth - MST[u].depth;
     if(dif) // if the depth of nodes are different, adjust the depth with index
         for(int i = 0; i < MAX_HEIGHT && v; i++)
             if((1 << i) & dif) // if there is enough space to jump
@@ -4245,21 +4258,52 @@ int LCA(int u, int v)
 
 void fill_dp(int index) // fills the DP array at index "index" (e.g. DP[index])
 {
-    DP[index][0] = tree[index].parent;
+    DP[index][0] = MST[index].parent;
     for(int i = 1; i < MAX_HEIGHT; i++)
         DP[index][i] = DP[DP[index][i - 1]][i - 1];
 }
 
 void DFS(int index, int parent, int depth)
 {
-    tree[index].parent = parent;
-    tree[index].depth = depth;
+    MST[index].parent = parent;
+    MST[index].depth = depth;
     
     fill_dp(index);
     
-    for(auto next : tree[index].node) // for every child node of current node
+    for(auto next : MST[index].node) // for every child node of current node
         if(next != parent)
             DFS(next, index, depth + 1);
+}
+
+int unite(int A, int B, int& V)
+{
+    int smaller = (UF_SIZE[UF[A]] < UF_SIZE[UF[B]]) ? UF[A] : UF[B];
+    int larger = (UF_SIZE[UF[A]] < UF_SIZE[UF[B]]) ? UF[B] : UF[A];
+    
+    for(int i = 1; i <= V; i++)
+        if(UF[i] == smaller)
+            UF[i] = larger;
+    
+    UF_SIZE[larger] += UF_SIZE[smaller];
+    UF_SIZE[smaller] = 0;
+    
+    return larger;
+}
+
+bool find(int A, int B) // if A & B connected returns true, else return false
+{
+    if(UF[A] == UF[B])
+        return true;
+    
+    return false;
+}
+
+bool compare(pairs A, pairs B)
+{
+    if (A.edge == B.edge)
+        return A.a < B.a;
+    else
+        return A.edge < B.edge;
 }
 
 int main()
@@ -4267,39 +4311,77 @@ int main()
     std::ios_base::sync_with_stdio(false);
     std::cin.tie(NULL);
     
-    for(int i = 0; i < MAX_NODE; i++) // tree initialization
+    std::vector<pairs> edges;
+    int V, E, MST_result; MST_result = 0;
+    std::cin >> V >> E;
+    
+    for(int i = 0; i < MAX_VERTICES; i++)
     {
-        tree[i].parent = tree[i].depth = 0;
+        UF[i] = i;
+        UF_SIZE[i] = 0;
         for(int j = 0; j < MAX_HEIGHT; j++)
             DP[i][j] = 0;
     }
     
-    std::cin >> N;
-    
-    for(int i = 0; i < N - 1; i++) // input the link data into the adjacency list
+    for(int i = 0; i < E; i++)
     {
-        int node1, node2;
-        std::cin >> node1 >> node2;
-        
-        tree[node1].node.push_back(node2);
-        tree[node2].node.push_back(node1);
+        pairs temp;
+        std::cin >> temp.a >> temp.b >> temp.edge;
+        temp.inMST = false;
+        edges.push_back(temp);
     }
     
-    DFS(1, 0, 0); // perform DFS to scrutinize tree structure, starting at root node: 1
+    // sort edges in ascending order
+    std::sort(edges.begin(), edges.end(), compare);
     
-    std::cin >> M;
-    std::vector<int> result; // dynamic array for storing the LCA calculation results
+    // kruskal's algorithm
+    int union_num = -1;
+    for(auto p = edges.begin(); p != edges.end(); p++)
+        if(!find(p->a, p->b))
+        {
+            p->inMST = true;
+            union_num = unite(p->a, p->b, V);
+            MST[p->a].emplace_back(p->b, p->edge); // store in 2D vector MST
+            MST[p->b].emplace_back(p->a, p->edge); // store in 2D vector MST
+            MST_result += p->edge;
+        }
     
-    for(int i = 0; i < M; i++) // for M, calculate the LCA for every input pair
+    // if there is no MST
+    if(union_num == -1)
     {
-        int u, v;
-        std::cin >> u >> v;
-        result.push_back(LCA(u, v));
+        std::cout << "-1\n";
+        return 0;
     }
     
-    for(auto i = result.begin(); i != result.end(); i++) // output the results of the calculation done above
-        std::cout << *i << '\n';
+    int min_result = INT_MAX;
     
+    // process second best MST
+    for(auto i = edges.begin(); i != edges.end(); i++)
+        if(!(i->inMST)) // if edge i is not in MST
+        {
+            int temp_result = MST_result + i->edge; // add edge i to MST
+            
+            // find cycle
+            
+            pairs max; max.edge = -1;
+            for(auto j = edges.begin(); j != edges.end(); j++) // find max edge in MST not equal to edge i
+                if(j->inMST && j->edge > max.edge)
+                    max = *j;
+            
+            temp_result -= max.edge;
+            
+            if(min_result > temp_result)
+                min_result = temp_result;
+        }
+    
+    // if there is no second best MST
+    if(min_result <= MST_result)
+    {
+        std::cout << "-1\n";
+        return 0;
+    }
+    
+    std::cout << min_result << '\n';
     return 0;
 }
 */
@@ -6174,8 +6256,47 @@ int main()
     return 0;
 }
 */
+/*
+2020-03-08
+Lee Min Keon
+Baekjoon Online Judge #5543
+mkleelboy3@naver.com
+*/
+/*
+#include <iostream>
 
-
+int main()
+{
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    
+    int total = -1 * 50;
+    
+    int min = 3000;
+    for(int i = 0; i < 3; i++)
+    {
+        int input;
+        std::cin >> input;
+        
+        if(input < min)
+            min = input;
+    }
+    
+    total += min;
+    
+    min = 3000;
+    for(int i = 0; i < 2; i++)
+    {
+        int input;
+        std::cin >> input;
+        
+        if(input < min)
+            min = input;
+    }
+    
+    std::cout << total + min;
+}
+*/
 
 
 
