@@ -6297,6 +6297,48 @@ int main()
     std::cout << total + min;
 }
 */
+/*
+2020-03-11
+Lee Min Keon
+Baekjoon Online Judge #1009
+mkleeboy3@naver.com
+*/
+/*
+#include <iostream>
+
+int main()
+{
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    
+    int tc;
+    std::cin >> tc;
+    
+    while(tc--)
+    {
+        int a, b;
+        std::cin >> a >> b;
+
+        int result = 1;
+        
+        for(int i = 0; i < b; i++)
+        {
+            if(result >= 10)
+                result /= 10;
+            
+            result *= a;
+            result %= 10;
+        }
+        
+        if(result == 0)
+            std::cout << 10 << '\n';
+        else
+            std::cout << result << '\n';
+    }
+    
+    return 0;
+}
+*/
 
 
 
