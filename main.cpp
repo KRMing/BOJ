@@ -6339,7 +6339,37 @@ int main()
     return 0;
 }
 */
+/*
+2020-03-15
+Lee Min Keon
+Baekjoon Online Judge #1247
+mkleeboy3@naver.com
+*/
 
+#include <iostream>
+
+int main()
+{
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    
+    for(int tc = 0; tc < 3; tc++)
+    {
+        int N;
+        std::cin >> N;
+        
+        char sign = 0;
+        
+        for(int n = 0; n < N; n++)
+        {
+            long long int num;
+            std::cin >> num;
+            
+            
+            
+        }
+    }
+}
 
 
 
