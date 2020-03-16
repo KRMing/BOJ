@@ -6349,7 +6349,7 @@ mkleeboy3@naver.com
 #include <iostream>
 #include <algorithm>
 
-#define MAX 100000
+typedef long long int lld;
 
 int main()
 {
@@ -6361,16 +6361,13 @@ int main()
         int N;
         std::cin >> N;
         
-        long long int total = 0;
-        long long int arr[MAX];
+        lld total = 0;
+        lld* arr = new lld[N];
         
         for(int n = 0; n < N; n++)
             std::cin >> arr[n];
 
         std::sort(arr, arr + N);
-//
-//        for(int i = 0; i < N; i++)
-//            std::cout << arr[i] << ' ';
         
         int i = 0, j = N - 1;
         for(; i < j; i++, j--)
@@ -6379,8 +6376,12 @@ int main()
         if(i == j)
             total += arr[i];
         
-        total ? total > 0 ? std::cout << "+" : std::cout << "-" : std::cout << "0";
+        total ? (total > 0 ? std::cout << "+\n" : std::cout << "-\n") : std::cout << "0\n";
+        
+        delete[] arr;
     }
+    
+    return 0;
 }
 
 
