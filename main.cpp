@@ -6340,13 +6340,16 @@ int main()
 }
 */
 /*
-2020-03-15
+2020-03-16
 Lee Min Keon
 Baekjoon Online Judge #1247
 mkleeboy3@naver.com
 */
 
 #include <iostream>
+#include <algorithm>
+
+#define MAX 100000
 
 int main()
 {
@@ -6358,16 +6361,25 @@ int main()
         int N;
         std::cin >> N;
         
-        char sign = 0;
+        long long int total = 0;
+        long long int arr[MAX];
         
         for(int n = 0; n < N; n++)
-        {
-            long long int num;
-            std::cin >> num;
-            
-            
-            
-        }
+            std::cin >> arr[n];
+
+        std::sort(arr, arr + N);
+//
+//        for(int i = 0; i < N; i++)
+//            std::cout << arr[i] << ' ';
+        
+        int i = 0, j = N - 1;
+        for(; i < j; i++, j--)
+            total += arr[i] + arr[j];
+        
+        if(i == j)
+            total += arr[i];
+        
+        total ? total > 0 ? std::cout << "+" : std::cout << "-" : std::cout << "0";
     }
 }
 
