@@ -6349,7 +6349,7 @@ mkleeboy3@naver.com
 #include <iostream>
 #include <algorithm>
 
-typedef long long int lld;
+typedef long double llf;
 
 int main()
 {
@@ -6361,8 +6361,8 @@ int main()
         int N;
         std::cin >> N;
         
-        lld total = 0;
-        lld* arr = new lld[N];
+        llf total = 0;
+        llf* arr = new llf[N];
         
         for(int n = 0; n < N; n++)
             std::cin >> arr[n];
@@ -6383,65 +6383,6 @@ int main()
     
     return 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
