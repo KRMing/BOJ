@@ -6345,9 +6345,11 @@ Lee Min Keon
 Baekjoon Online Judge #1247
 mkleeboy3@naver.com
 */
-
+/*
 #include <iostream>
 #include <algorithm>
+
+#define MAX 100000
 
 typedef long double llf;
 
@@ -6362,7 +6364,7 @@ int main()
         std::cin >> N;
         
         llf total = 0;
-        llf* arr = new llf[N];
+        llf arr[MAX];
         
         for(int n = 0; n < N; n++)
             std::cin >> arr[n];
@@ -6377,13 +6379,11 @@ int main()
             total += arr[i];
         
         total ? (total > 0 ? std::cout << "+\n" : std::cout << "-\n") : std::cout << "0\n";
-        
-        delete[] arr;
     }
     
     return 0;
 }
-
+*/
 
 
 
