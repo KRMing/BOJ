@@ -6384,8 +6384,35 @@ int main()
     return 0;
 }
 */
+/*
+2020-03-18
+Lee Min Keon
+Baekjoon Online Judge #14681
+mkleeboy3@naver.com
+*/
+/*
+#include <iostream>
 
-
+int main()
+{
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    
+    int x, y;
+    std::cin >> x >> y;
+    
+    if(x > 0 && y > 0)
+        std::cout<< "1\n";
+    else if(x > 0 && y < 0)
+        std::cout<< "4\n";
+    else if(x < 0 && y > 0)
+        std::cout<< "2\n";
+    else
+        std::cout<< "3\n";
+    
+    return 0;
+}
+*/
 
 
 
