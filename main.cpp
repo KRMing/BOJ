@@ -6413,8 +6413,53 @@ int main()
     return 0;
 }
 */
+/*
+2020-03-20
+Lee Min Keon
+Baekjoon Online Judge #2446
+mkleeboy3@naver.com
+*/
+/*
+#include <iostream>
 
+void stars(int space, int star)
+{
+    if(star == 1)
+    {
+        for(int i = 0; i < space; i++)
+            std::cout << ' ';
+        std::cout << "*\n";
+        return;
+    }
+    
+    for(int i = 0; i < space; i++)
+        std::cout << ' ';
+    
+    for(int i = 0; i < star; i++)
+        std::cout << '*';
+    std::cout << '\n';
+    
+    stars(space + 1, star - 2);
+    
+    for(int i = 0; i < space; i++)
+    std::cout << ' ';
+    
+    for(int i = 0; i < star; i++)
+        std::cout << '*';
+    std::cout << '\n';
+}
 
+int main()
+{
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    
+    int n;
+    std::cin >> n;
+    
+    stars(0, n * 2 - 1);
+}
+*/
 
 
 
