@@ -6460,8 +6460,24 @@ int main()
     stars(0, n * 2 - 1);
 }
 */
+/*
+2020-03-21
+Lee Min Keon
+Baekjoon Online Judge #10996
+mkleeboy3@naver.com
+*/
 
+#include <iostream>
 
+int main()
+{
+    std::ios_base::sync_with_stdio(false);
+    std::cin.tie(NULL);
+    
+    
+    
+    return 0;
+}
 
 
 
